@@ -1,0 +1,3 @@
+Tests: runexamples
+Depends: cfortran, gcc, gfortran
+Restrictions: allow-stderr

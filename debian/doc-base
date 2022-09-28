@@ -1,0 +1,10 @@
+Document: cfortran
+Title: cfortran.h:  Interfacing C or C++ and FORTRAN
+Author: Burkhard Burow
+Abstract: This manual how to use the header cfortran.h,
+ and how to link C and fortran language
+Section: Programming
+
+Format: HTML
+Index: /usr/share/doc/cfortran/index.html
+Files: /usr/share/doc/cfortran/*.html

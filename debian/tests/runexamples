@@ -1,0 +1,19 @@
+#!/bin/sh
+
+set -e
+tmpdir=$(mktemp -d)
+trap 'rm -rf "$tmpdir"' EXIT INT TERM HUP
+
+cp -r /usr/share/doc/cfortran/examples "$tmpdir"
+
+cd "$tmpdir/examples"
+
+for D in `find . -maxdepth 1 -type d`; do
+    if test "x$D" = "x."; then continue; fi;
+    cd "$D"
+    gcc -c *.c
+    gfortran -c *.f
+    gcc *.o -lgfortran -o test
+    ./test
+    cd ..
+done

@@ -1,0 +1,40 @@
+#!/usr/bin/make -f
+# Sample debian/rules that uses debhelper.
+# GNU copyright 1997 to 1999 by Joey Hess.
+
+# Uncomment this to turn on verbose mode.
+export DH_VERBOSE=1
+
+%:
+	dh $@ --with autoreconf
+
+override_dh_auto_configure:
+	dh_auto_configure -- --includedir=/usr/include/cfortran/
+
+override_dh_auto_clean:
+	dh_auto_clean
+	rm -rf examples
+
+override_dh_auto_build:
+	cp -r eg examples
+	dh_auto_build
+
+override_dh_installexamples:
+ifeq (,$(filter nodoc,$(DEB_BUILD_OPTIONS) $(DEB_BUILD_PROFILES)))
+	rm -f examples/Makefile*
+	dh_installexamples
+	find $(CURDIR)/debian/cfortran/usr/share/doc/cfortran/examples/ -name '*.c' -exec \
+		sed -i 's,include "cfortran.h",include <cfortran/cfortran.h>,g' {} \;
+	find $(CURDIR)/debian/cfortran/usr/share/doc/cfortran/examples/ -empty -type d -delete
+else
+	@echo '**********************************************************'
+	@echo 'Skip example                                              '
+	@echo '**********************************************************'
+endif
+
+override_dh_installdocs:
+	dh_installdocs
+	mv $(CURDIR)/debian/cfortran/usr/share/doc/cfortran/index.htm $(CURDIR)/debian/cfortran/usr/share/doc/cfortran/index.html
+
+override_dh_compress:
+	dh_compress -Xexamples
